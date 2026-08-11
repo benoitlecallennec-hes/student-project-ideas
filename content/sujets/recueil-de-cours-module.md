@@ -5,6 +5,7 @@ description: "1241.1 Langage C : \\<1ère année\\> \\<SA\\> \\<ISC\\> \\<Langag
 summary: "1241.1 Langage C : \\<1ère année\\> \\<SA\\> \\<ISC\\> \\<Langage C\\> Voir https://he-arc.github.io/imagerie-portfolio/"
 categories:
   - "Cours GELO"
+  - "P3 HES d'été"
 statuts:
   - "Prospection"
 tags:
