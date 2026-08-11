@@ -1,0 +1,62 @@
+colorScheme = "hearc"
+defaultAppearance = "light"
+autoSwitchAppearance = false
+enableSearch = true
+# Blowfish 2.84 head.html calls `i18n " code.copy"` with a stray space, so the
+# copy tooltips render empty. Not worth an override for a catalogue of ideas.
+enableCodeCopy = false
+
+[header]
+layout = "fixed-fill-blur"
+
+[footer]
+showCopyright = true
+showThemeAttribution = false
+showAppearanceSwitcher = false
+showScrollToTop = true
+
+[homepage]
+layout = "page"
+showRecent = false
+showMoreLink = false
+
+[article]
+showDate = false
+showDateUpdated = false
+showAuthor = false
+showHero = false
+showBreadcrumbs = true
+showDraftLabel = false
+showEdit = false
+seriesOpened = false
+showHeadingAnchors = true
+showPagination = false
+showReadingTime = false
+showTableOfContents = true
+showTaxonomies = true
+showAuthorsBadges = false
+showWordCount = false
+showSummary = false
+
+[list]
+showHero = false
+showBreadcrumbs = false
+showSummary = false
+showTableOfContents = false
+showCards = false
+groupByYear = false
+cardView = false
+cardViewScreenWidth = false
+
+[sitemap]
+excludedKinds = []
+
+[taxonomy]
+showTermCount = true
+cardView = false
+
+[term]
+showTermCount = true
+cardView = false
+cardViewScreenWidth = false
+groupByYear = false

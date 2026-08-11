@@ -1,0 +1,12 @@
+{
+  "name": "Idées de projets étudiants — HE-Arc Ingénierie",
+  "short_name": "Projets HE-Arc",
+  "icons": [
+    { "src": "/student-project-ideas/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/student-project-ideas/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#df1924",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/student-project-ideas/"
+}

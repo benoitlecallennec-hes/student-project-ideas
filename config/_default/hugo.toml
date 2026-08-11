@@ -1,0 +1,40 @@
+# -- Site Configuration --
+# https://blowfish.page/docs/configuration/
+
+theme = "blowfish"
+baseURL = "https://benoitlecallennec-hes.github.io/student-project-ideas/"
+defaultContentLanguage = "fr"
+
+enableRobotsTXT = true
+enableEmoji = true
+
+buildDrafts = false
+# A page dated in the future is silently dropped from the build. Use `hugo server -F` while editing.
+buildFuture = false
+
+summaryLength = 30
+timeout = "120s"
+
+# Sans ça Hugo titre-case les termes de taxonomie : « Non classé » deviendrait
+# « Non Classé » et « P3 HES d'été » « P3 HES D'été ».
+titleCaseStyle = "none"
+
+[pagination]
+  pagerSize = 200
+
+[taxonomies]
+  categorie = "categories"
+  statut = "statuts"
+  tag = "tags"
+
+[sitemap]
+  changefreq = 'daily'
+  filename = 'sitemap.xml'
+  priority = 0.5
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'

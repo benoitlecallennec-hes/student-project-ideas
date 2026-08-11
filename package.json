@@ -1,0 +1,19 @@
+{
+  "name": "student-project-ideas",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Catalogue des idées de projets étudiants — HE-Arc Ingénierie",
+  "scripts": {
+    "server": "hugo server",
+    "server:future": "hugo server -F",
+    "css:build": "tailwindcss -i ./themes/blowfish/assets/css/main.css -o ./assets/css/compiled/main.css",
+    "css:watch": "tailwindcss -i ./themes/blowfish/assets/css/main.css -o ./assets/css/compiled/main.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.4",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
+    "tailwind-scrollbar": "^4.0.2",
+    "tailwindcss": "^4.1.4"
+  }
+}

@@ -1,0 +1,14 @@
+[[main]]
+  name = "Sujets disponibles"
+  pageRef = "sujets"
+  weight = 10
+
+[[main]]
+  name = "Projets réalisés"
+  pageRef = "realisations"
+  weight = 20
+
+[[main]]
+  name = "Catégories"
+  pageRef = "categories"
+  weight = 30
