@@ -1,0 +1,7 @@
+filters_status: "Statut"
+filters_category: "Catégorie"
+filters_reset: "Tout afficher"
+filters_no_match: "Aucun sujet ne correspond à cette combinaison de filtres."
+filters_count_one: "{n} sujet sur {total}"
+filters_count_many: "{n} sujets sur {total}"
+list_stub_notice: "Sujet à préciser — écrivez-moi pour le cadrer ensemble."

@@ -1,0 +1,17 @@
+{{- $summary := trim (.Params.summary | default (.Summary | plainify)) " \n\t" -}}
+<a class="pi" href="{{ .RelPermalink }}"
+   data-cats="{{ delimit (.Params.categories | default slice) "|" }}"
+   data-stat="{{ delimit (.Params.statuts | default slice) "|" }}">
+  <span class="pi-head">
+    <span class="pi-title">{{ .Title | emojify }}</span>
+    <span class="pi-badges">
+      {{- range .Params.statuts }}<span class="pi-badge pi-badge--stat">{{ . }}</span>{{ end -}}
+      {{- range .Params.categories }}<span class="pi-badge">{{ . }}</span>{{ end -}}
+    </span>
+  </span>
+  {{ with $summary }}
+  <span class="pi-desc">{{ . }}</span>
+  {{ else }}
+  <span class="pi-desc pi-desc--todo">{{ i18n "list_stub_notice" }}</span>
+  {{ end }}
+</a>

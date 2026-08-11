@@ -1,0 +1,39 @@
+{{ define "main" }}
+{{ .Scratch.Set "scope" "list" }}
+
+<header>
+  <h1 class="mt-5 text-4xl font-extrabold text-neutral-900 dark:text-neutral">{{ .Title | emojify }}</h1>
+</header>
+
+<section class="mt-0 prose flex max-w-full flex-col dark:prose-invert">
+  <div class="min-w-0 min-h-0 max-w-prose">
+    {{ .Content }}
+  </div>
+</section>
+
+{{ $pages := .Pages.ByDate.Reverse }}
+{{ if gt (len $pages) 0 }}
+
+  {{ if .Params.showFilters }}
+  {{ partial "project-filters.html" (dict "pages" $pages) }}
+  {{ end }}
+
+  <section id="project-list" class="pi-list">
+    {{ range $pages }}
+    {{ partial "project-item.html" . }}
+    {{ end }}
+  </section>
+
+  {{ if .Params.showFilters }}
+  <p id="project-empty" class="pi-empty is-hidden">{{ i18n "filters_no_match" }}</p>
+  {{ $js := resources.Get "js/filters.js" | resources.Minify | resources.Fingerprint "sha512" }}
+  <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+  {{ end }}
+
+{{ else }}
+  <section class="mt-10 prose dark:prose-invert">
+    <p class="py-8 border-t"><em>{{ i18n "list.no_articles" | emojify }}</em></p>
+  </section>
+{{ end }}
+
+{{ end }}

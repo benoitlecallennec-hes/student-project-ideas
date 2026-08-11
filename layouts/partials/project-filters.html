@@ -1,0 +1,41 @@
+{{- /* Puces construites depuis les pages de la section courante, pas depuis
+       .Site.Taxonomies qui mélangerait sujets et réalisations. */ -}}
+{{- $pages := .pages -}}
+{{- $cats := slice -}}
+{{- $stats := slice -}}
+{{- range $pages -}}
+  {{- range .Params.categories }}{{ $cats = $cats | append . }}{{ end -}}
+  {{- range .Params.statuts }}{{ $stats = $stats | append . }}{{ end -}}
+{{- end -}}
+
+{{- /* Du plus vague au plus prêt à démarrer, plutôt qu'alphabétique. */ -}}
+{{- $ordreStatuts := slice "Idea" "Prospection" "Next Up" "In Progress" "OnHold" "Completed" "WontDo" -}}
+{{- $statsTries := slice -}}
+{{- range $ordreStatuts }}{{ if in $stats . }}{{ $statsTries = $statsTries | append . }}{{ end }}{{ end -}}
+{{- range ($stats | uniq | sort) }}{{ if not (in $ordreStatuts .) }}{{ $statsTries = $statsTries | append . }}{{ end }}{{ end -}}
+
+<div id="project-filters" class="pf" hidden>
+  <div class="pf-row">
+    <span class="pf-label">{{ i18n "filters_status" }}</span>
+    {{- range $statsTries }}
+    {{- $t := . }}{{ $n := 0 }}
+    {{- range $stats }}{{ if eq . $t }}{{ $n = add $n 1 }}{{ end }}{{ end }}
+    <button type="button" class="pf-chip" data-group="stat" data-value="{{ $t }}">{{ $t }}<span class="pf-n">{{ $n }}</span></button>
+    {{- end }}
+  </div>
+  <div class="pf-row">
+    <span class="pf-label">{{ i18n "filters_category" }}</span>
+    {{- range ($cats | uniq | sort) }}
+    {{- $t := . }}{{ $n := 0 }}
+    {{- range $cats }}{{ if eq . $t }}{{ $n = add $n 1 }}{{ end }}{{ end }}
+    <button type="button" class="pf-chip" data-group="cats" data-value="{{ $t }}">{{ $t }}<span class="pf-n">{{ $n }}</span></button>
+    {{- end }}
+  </div>
+  <div class="pf-row pf-row--foot">
+    <button type="button" id="pf-reset" class="pf-reset">{{ i18n "filters_reset" }}</button>
+    <span id="project-count" class="pf-count"
+          data-total="{{ len $pages }}"
+          data-tpl-one="{{ i18n "filters_count_one" }}"
+          data-tpl-many="{{ i18n "filters_count_many" }}"></span>
+  </div>
+</div>
