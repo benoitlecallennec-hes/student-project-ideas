@@ -45,10 +45,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Vérifier l'absence de fuite Notion
+      - name: Check for leaked Notion URLs
         run: |
           if grep -rIn "notion\.so\|app\.notion\.com" content/; then
-            echo "::error::URL Notion privée trouvée dans content/"
+            echo "::error::private Notion URL found in content/"
             exit 1
           fi
       - name: Setup Pages

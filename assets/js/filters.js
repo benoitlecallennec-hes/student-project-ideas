@@ -1,5 +1,5 @@
-// Filtrage client de la liste des sujets : OU à l'intérieur d'un groupe,
-// ET entre les groupes. L'état est reflété dans l'URL pour être partageable.
+// Client-side filtering of the subject list: OR within a group, AND across
+// groups. The state is mirrored in the URL so a filtered view can be shared.
 (function () {
   var bar = document.getElementById("project-filters");
   var list = document.getElementById("project-list");
@@ -45,7 +45,7 @@
 
     if (counter) {
       var total = counter.dataset.total;
-      // En français 0 et 1 prennent le singulier.
+      // French takes the singular for both 0 and 1.
       var tpl = shown <= 1 ? counter.dataset.tplOne : counter.dataset.tplMany;
       counter.textContent = tpl.replace("{n}", shown).replace("{total}", total);
     }
@@ -88,7 +88,7 @@
   var incoming = new URLSearchParams(location.search);
   Object.keys(GROUPS).forEach(function (group) {
     incoming.getAll(GROUPS[group]).forEach(function (v) {
-      // Une valeur inconnue viendrait d'un lien obsolète : on l'ignore.
+      // An unknown value would come from a stale link, so ignore it.
       if (known[group].indexOf(v) !== -1 && selected[group].indexOf(v) === -1) {
         selected[group].push(v);
       }

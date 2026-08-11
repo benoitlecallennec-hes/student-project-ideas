@@ -1,47 +1,47 @@
 #!/usr/bin/env python3
-"""Convertit les fiches de 3282.1-P3-TB/projets/*.md en contenu Hugo.
+"""Convert the fiches in 3282.1-P3-TB/projets/*.md into Hugo content.
 
-Usage : python tools/import_projets.py <chemin/vers/projets> [--dry-run]
+Usage: python tools/import_projets.py <path/to/projets> [--dry-run]
 
-Script one-shot : il a été exécuté une seule fois pour amorcer content/, qui est
-depuis la source de vérité et s'édite à la main. Le relancer écrase content/sujets
-et content/realisations. Voir tools/README.md.
+One-shot script: it was run once to bootstrap content/, which has been the source
+of truth ever since and is edited by hand. Running it again overwrites everything
+under content/sujets and content/realisations. See tools/README.md.
 
-Aucune dépendance externe (même convention que le build_dashboard.py du repo source).
+No external dependency, same convention as build_dashboard.py in the source repo.
 """
 import os
 import re
 import sys
 
-STATUT_REALISE = "Completed"
-SECTION_SUJETS = "sujets"
-SECTION_REALISATIONS = "realisations"
-CATEGORIE_DEFAUT = "Non classé"
-CLES_LISTE = {"categories", "tags"}
-RESUME_MAX = 180
+DONE_STATUS = "Completed"
+SECTION_SUBJECTS = "sujets"
+SECTION_DELIVERED = "realisations"
+DEFAULT_CATEGORY = "Non classé"
+LIST_KEYS = {"categories", "tags"}
+SUMMARY_MAX = 180
 
-# Traces de la migration Notion : renvoient à une page privée, aucun sens ici.
-BLOCKQUOTES_ARTEFACT = (
+# Leftovers from the Notion migration: they point at a private page, meaningless here.
+MIGRATION_BLOCKQUOTES = (
     "*Image d'illustration non migrée — voir la page Notion d'origine.*",
     "*Cette page Notion contenait un ou plusieurs bookmarks (aperçus de liens) non exportables.*",
 )
 
-# Sections retirées : noms de personnes, le site public ne doit en porter aucun.
-SECTIONS_RETIREES = ("Mandants",)
+# Sections dropped entirely: they list people, and the public site carries no names.
+DROPPED_SECTIONS = ("Mandants",)
 
-LIGNES_RETIREES = ("Voir proto Python / Jupyter fait pour Emma.",)
+DROPPED_LINES = ("Voir proto Python / Jupyter fait pour Emma.",)
 
-# Signale ce qui doit être relu à la main : le script ne devine pas la réécriture.
-MOTIFS_A_RELIRE = (
-    (re.compile(r"\bEmail\b|\bMuller\b|\bAubry\b|\bEmma\b"), "mention nominative résiduelle"),
-    (re.compile(r"suivi/\d{4}-\d{4}"), "chemin interne du repo de suivi"),
-    (re.compile(r"gitlab-etu|\.ing\.he-arc\.ch"), "URL interne HE-Arc"),
-    (re.compile(r"^- \[[ x]\]", re.M), "checklist de tâches internes"),
+# Flags what a human must rewrite: the script does not guess these.
+REVIEW_PATTERNS = (
+    (re.compile(r"\bEmail\b|\bMuller\b|\bAubry\b|\bEmma\b"), "leftover personal name"),
+    (re.compile(r"suivi/\d{4}-\d{4}"), "internal path into the tracking repo"),
+    (re.compile(r"gitlab-etu|\.ing\.he-arc\.ch"), "internal HE-Arc URL"),
+    (re.compile(r"^- \[[ x]\]", re.M), "internal task checklist"),
 )
 
-LIEN_LOCAL = re.compile(r"\[([^\]]+)\]\(([a-z0-9][a-z0-9-]*)\.md\)")
-BLOC_NON_PARAGRAPHE = re.compile(r"^(#{1,6} |>|[-*+] |\d+\. |\||```|\{\{)")
-MARKDOWN_INLINE = (
+LOCAL_LINK = re.compile(r"\[([^\]]+)\]\(([a-z0-9][a-z0-9-]*)\.md\)")
+NON_PARAGRAPH_BLOCK = re.compile(r"^(#{1,6} |>|[-*+] |\d+\. |\||```|\{\{)")
+INLINE_MARKDOWN = (
     (re.compile(r"\[([^\]]+)\]\([^)]*\)"), r"\1"),
     (re.compile(r"\*\*([^*]+)\*\*"), r"\1"),
     (re.compile(r"(?<!\w)[*_]([^*_]+)[*_](?!\w)"), r"\1"),
@@ -87,16 +87,16 @@ def parse_file(path):
         text = f.read().replace("\r\n", "\n").replace("\r", "\n")
     m = re.match(r"^---\n(.*?)\n---\n?(.*)$", text, re.S)
     if not m:
-        raise ValueError(f"{os.path.basename(path)} : frontmatter absent ou mal délimité")
+        raise ValueError(f"{os.path.basename(path)}: missing or malformed frontmatter")
     meta = {}
     for line in m.group(1).splitlines():
         if not line.strip() or line.strip().startswith("#"):
             continue
         key, sep, val = line.partition(":")
         if not sep:
-            raise ValueError(f"{os.path.basename(path)} : ligne sans deux-points : {line!r}")
+            raise ValueError(f"{os.path.basename(path)}: line without a colon: {line!r}")
         key = key.strip()
-        meta[key] = parse_value(val, key in CLES_LISTE)
+        meta[key] = parse_value(val, key in LIST_KEYS)
     return meta, m.group(2)
 
 
@@ -120,70 +120,70 @@ def emit_frontmatter(fields):
     return "\n".join(lines)
 
 
-def strip_h1(body, titre):
-    """Blowfish rend déjà .Title en <h1> ; garder celui du corps ferait deux h1."""
+def strip_h1(body, title):
+    """Blowfish already renders .Title as an <h1>; keeping the body one gives two."""
     lines = body.split("\n")
     for i, line in enumerate(lines):
         if not line.strip():
             continue
         if line.startswith("# "):
-            if line[2:].strip() != titre:
-                raise ValueError(f"H1 {line[2:].strip()!r} != titre {titre!r}")
+            if line[2:].strip() != title:
+                raise ValueError(f"h1 {line[2:].strip()!r} != title {title!r}")
             return "\n".join(lines[:i] + lines[i + 1:])
         break
-    raise ValueError(f"aucun H1 en tête pour {titre!r}")
+    raise ValueError(f"no leading h1 for {title!r}")
 
 
-def strip_artifact_lines(body):
-    """Retrait ligne à ligne : rotors-geometric-algebra porte les deux blockquotes."""
-    retires = 0
+def strip_migration_lines(body):
+    """Line by line: rotors-geometric-algebra carries both blockquotes."""
+    dropped = 0
     kept = []
     for line in body.split("\n"):
         stripped = line.strip()
-        if any(stripped == "> " + a for a in BLOCKQUOTES_ARTEFACT):
-            retires += 1
+        if any(stripped == "> " + a for a in MIGRATION_BLOCKQUOTES):
+            dropped += 1
             continue
-        if stripped in LIGNES_RETIREES:
-            retires += 1
+        if stripped in DROPPED_LINES:
+            dropped += 1
             continue
         kept.append(line)
-    return "\n".join(kept), retires
+    return "\n".join(kept), dropped
 
 
-def strip_sections(body, titres):
-    """Retire un `## Titre` et son contenu, jusqu'au prochain titre de niveau <= 2."""
+def strip_sections(body, titles):
+    """Drop a `## Title` and its content, up to the next heading of level <= 2."""
     lines = body.split("\n")
-    kept, retirees = [], []
+    kept, dropped = [], []
     i = 0
     while i < len(lines):
         m = re.match(r"^(#{1,2}) +(.+?) *$", lines[i])
-        if m and m.group(2) in titres:
-            retirees.append(m.group(2))
-            niveau = len(m.group(1))
+        if m and m.group(2) in titles:
+            dropped.append(m.group(2))
+            level = len(m.group(1))
             i += 1
             while i < len(lines):
-                suivant = re.match(r"^(#{1,6}) +", lines[i])
-                if suivant and len(suivant.group(1)) <= niveau:
+                following = re.match(r"^(#{1,6}) +", lines[i])
+                if following and len(following.group(1)) <= level:
                     break
                 i += 1
             continue
         kept.append(lines[i])
         i += 1
-    return "\n".join(kept), retirees
+    return "\n".join(kept), dropped
 
 
-def rewrite_local_links(body, sections_par_slug, source_slug):
-    reecrits = []
+def rewrite_local_links(body, sections_by_slug, source_slug):
+    rewritten = []
 
-    def remplacer(m):
-        libelle, cible = m.group(1), m.group(2)
-        section = sections_par_slug.get(cible)
+    def replace(m):
+        label, target = m.group(1), m.group(2)
+        section = sections_by_slug.get(target)
         if section is None:
-            raise ValueError(f"{source_slug} : lien vers {cible}.md, fiche inconnue")
-        reecrits.append(f"{source_slug} → {section}/{cible}")
-        return f'[{libelle}]({{{{< relref "/{section}/{cible}" >}}}})'
+            raise ValueError(f"{source_slug}: link to {target}.md, unknown fiche")
+        rewritten.append(f"{source_slug} -> {section}/{target}")
+        return f'[{label}]({{{{< relref "/{section}/{target}" >}}}})'
 
-    return LIEN_LOCAL.sub(remplacer, body), reecrits
+    return LOCAL_LINK.sub(replace, body), rewritten
 
 
 def normalize_blank_lines(body):
@@ -191,145 +191,145 @@ def normalize_blank_lines(body):
 
 
 def first_paragraph(body):
-    bloc = []
+    block = []
     for line in body.split("\n"):
         stripped = line.strip()
         if not stripped:
-            if bloc:
+            if block:
                 break
             continue
-        if BLOC_NON_PARAGRAPHE.match(stripped):
-            if bloc:
+        if NON_PARAGRAPH_BLOCK.match(stripped):
+            if block:
                 break
             continue
-        bloc.append(stripped)
-    texte = " ".join(bloc)
-    for motif, remplacement in MARKDOWN_INLINE:
-        texte = motif.sub(remplacement, texte)
-    texte = re.sub(r"\s+", " ", texte).strip()
-    if len(texte) > RESUME_MAX:
-        coupe = texte[:RESUME_MAX].rsplit(" ", 1)[0]
-        texte = coupe.rstrip(" ,;:.") + "…"
-    return texte
+        block.append(stripped)
+    text = " ".join(block)
+    for pattern, replacement in INLINE_MARKDOWN:
+        text = pattern.sub(replacement, text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) > SUMMARY_MAX:
+        cut = text[:SUMMARY_MAX].rsplit(" ", 1)[0]
+        text = cut.rstrip(" ,;:.") + "…"
+    return text
 
 
-def convert(path, sections_par_slug, journal):
+def convert(path, sections_by_slug, report):
     slug = os.path.basename(path)[:-3]
     meta, body = parse_file(path)
-    titre = meta["titre"]
-    statut = meta["statut"]
-    section = SECTION_REALISATIONS if statut == STATUT_REALISE else SECTION_SUJETS
+    title = meta["titre"]
+    status = meta["statut"]
+    section = SECTION_DELIVERED if status == DONE_STATUS else SECTION_SUBJECTS
 
-    body = strip_h1(body, titre)
-    body, n_artefacts = strip_artifact_lines(body)
-    body, sections_retirees = strip_sections(body, SECTIONS_RETIREES)
-    body, liens = rewrite_local_links(body, sections_par_slug, slug)
+    body = strip_h1(body, title)
+    body, migration_lines = strip_migration_lines(body)
+    body, dropped_sections = strip_sections(body, DROPPED_SECTIONS)
+    body, links = rewrite_local_links(body, sections_by_slug, slug)
     body = normalize_blank_lines(body)
 
-    journal["artefacts"] += n_artefacts
-    journal["sections_retirees"] += len(sections_retirees)
-    journal["liens"].extend(liens)
+    report["migration_lines"] += migration_lines
+    report["dropped_sections"] += len(dropped_sections)
+    report["links"].extend(links)
 
-    resume = first_paragraph(body)
-    if resume:
-        description = resume
+    summary = first_paragraph(body)
+    if summary:
+        description = summary
     else:
-        description = f"{titre} — idée de projet étudiant proposée à la HE-Arc Ingénierie."
-        journal["sans_resume"].append(f"{section}/{slug}")
+        description = f"{title} — idée de projet étudiant proposée à la HE-Arc Ingénierie."
+        report["without_summary"].append(f"{section}/{slug}")
 
-    categories = meta.get("categories") or [CATEGORIE_DEFAUT]
+    categories = meta.get("categories") or [DEFAULT_CATEGORY]
     if not meta.get("categories"):
-        journal["sans_categorie"].append(f"{section}/{slug}")
+        report["without_category"].append(f"{section}/{slug}")
 
     fields = {
-        "title": titre,
+        "title": title,
         "date": meta["cree"],
         "description": description,
-        "summary": resume,
+        "summary": summary,
         "categories": categories,
-        "statuts": [statut],
+        "statuts": [status],
         "tags": meta.get("tags"),
-        # `type` est réservé par Hugo (lookup des layouts) : renommé en `nature`.
+        # `type` is reserved by Hugo (it drives layout lookup), hence `nature`.
         "nature": meta.get("type"),
     }
 
-    for motif, libelle in MOTIFS_A_RELIRE:
-        if motif.search(body):
-            journal["a_relire"].append(f"{section}/{slug}.md — {libelle}")
+    for pattern, label in REVIEW_PATTERNS:
+        if pattern.search(body):
+            report["needs_review"].append(f"{section}/{slug}.md — {label}")
 
-    contenu = emit_frontmatter(fields)
+    document = emit_frontmatter(fields)
     if body:
-        contenu += "\n\n" + body
-    return section, slug, contenu + "\n"
+        document += "\n\n" + body
+    return section, slug, document + "\n"
 
 
 def main():
-    # Le journal contient des accents et des flèches ; la console Windows est en cp1252.
+    # The report has accents and arrows; the Windows console defaults to cp1252.
     sys.stdout.reconfigure(encoding="utf-8")
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     dry_run = "--dry-run" in sys.argv
     if len(args) != 1:
         sys.exit(__doc__)
     source = args[0]
-    fichiers = sorted(
+    paths = sorted(
         os.path.join(source, f) for f in os.listdir(source) if f.endswith(".md")
     )
-    if not fichiers:
-        sys.exit(f"aucun .md dans {source}")
+    if not paths:
+        sys.exit(f"no .md found in {source}")
 
-    # Table slug → section construite d'abord : les liens inter-fiches en dépendent.
-    sections_par_slug = {}
-    for path in fichiers:
+    # slug -> section table built first: the cross-fiche links depend on it.
+    sections_by_slug = {}
+    for path in paths:
         meta, _ = parse_file(path)
         slug = os.path.basename(path)[:-3]
-        sections_par_slug[slug] = (
-            SECTION_REALISATIONS if meta["statut"] == STATUT_REALISE else SECTION_SUJETS
+        sections_by_slug[slug] = (
+            SECTION_DELIVERED if meta["statut"] == DONE_STATUS else SECTION_SUBJECTS
         )
 
-    journal = {
-        "artefacts": 0,
-        "sections_retirees": 0,
-        "liens": [],
-        "sans_resume": [],
-        "sans_categorie": [],
-        "a_relire": [],
+    report = {
+        "migration_lines": 0,
+        "dropped_sections": 0,
+        "links": [],
+        "without_summary": [],
+        "without_category": [],
+        "needs_review": [],
     }
-    resultats = [convert(p, sections_par_slug, journal) for p in fichiers]
+    results = [convert(p, sections_by_slug, report) for p in paths]
 
-    racine = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "content")
+    root = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "content")
     if not dry_run:
-        for section in (SECTION_SUJETS, SECTION_REALISATIONS):
-            dossier = os.path.join(racine, section)
-            os.makedirs(dossier, exist_ok=True)
-            for nom in os.listdir(dossier):
-                if nom.endswith(".md") and nom != "_index.md":
-                    os.remove(os.path.join(dossier, nom))
-        for section, slug, contenu in resultats:
-            cible = os.path.join(racine, section, slug + ".md")
-            with open(cible, "w", encoding="utf-8", newline="\n") as f:
-                f.write(contenu)
+        for section in (SECTION_SUBJECTS, SECTION_DELIVERED):
+            folder = os.path.join(root, section)
+            os.makedirs(folder, exist_ok=True)
+            for name in os.listdir(folder):
+                if name.endswith(".md") and name != "_index.md":
+                    os.remove(os.path.join(folder, name))
+        for section, slug, document in results:
+            target = os.path.join(root, section, slug + ".md")
+            with open(target, "w", encoding="utf-8", newline="\n") as f:
+                f.write(document)
 
-    par_section = {}
-    for section, _, _ in resultats:
-        par_section[section] = par_section.get(section, 0) + 1
+    per_section = {}
+    for section, _, _ in results:
+        per_section[section] = per_section.get(section, 0) + 1
 
-    print(f"{len(resultats)} fiches converties" + (" (dry-run)" if dry_run else ""))
-    for section, n in sorted(par_section.items()):
-        print(f"  content/{section}/ : {n}")
-    print(f"blockquotes et lignes d'artefact retirés : {journal['artefacts']}")
-    print(f"sections retirées ({', '.join(SECTIONS_RETIREES)}) : {journal['sections_retirees']}")
-    print(f"liens inter-fiches réécrits en relref : {len(journal['liens'])}")
-    for lien in journal["liens"]:
-        print(f"  {lien}")
-    print(f"fiches sans catégorie → {CATEGORIE_DEFAUT} : {len(journal['sans_categorie'])}")
-    for f in journal["sans_categorie"]:
-        print(f"  {f}")
-    print(f"fiches sans résumé (esquisses) : {len(journal['sans_resume'])}")
-    for f in journal["sans_resume"]:
-        print(f"  {f}")
-    print(f"À RELIRE À LA MAIN : {len(journal['a_relire'])}")
-    for f in journal["a_relire"]:
-        print(f"  {f}")
+    print(f"{len(results)} fiches converted" + (" (dry run)" if dry_run else ""))
+    for section, count in sorted(per_section.items()):
+        print(f"  content/{section}/: {count}")
+    print(f"migration blockquotes and lines dropped: {report['migration_lines']}")
+    print(f"sections dropped ({', '.join(DROPPED_SECTIONS)}): {report['dropped_sections']}")
+    print(f"cross-fiche links rewritten as relref: {len(report['links'])}")
+    for link in report["links"]:
+        print(f"  {link}")
+    print(f"fiches without a category -> {DEFAULT_CATEGORY}: {len(report['without_category'])}")
+    for name in report["without_category"]:
+        print(f"  {name}")
+    print(f"fiches without a summary (stubs): {len(report['without_summary'])}")
+    for name in report["without_summary"]:
+        print(f"  {name}")
+    print(f"NEEDS MANUAL REVIEW: {len(report['needs_review'])}")
+    for name in report["needs_review"]:
+        print(f"  {name}")
 
 
 if __name__ == "__main__":

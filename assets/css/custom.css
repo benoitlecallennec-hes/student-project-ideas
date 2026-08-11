@@ -15,15 +15,15 @@
   background-color: rgba(223, 25, 36, 0.1) !important;
 }
 
-/* Catalogue des sujets.
-   Écrit à la main : assets/css/compiled/main.css est un JIT Tailwind figé et
-   committé, donc une classe utilitaire non déjà présente n'aurait aucun effet. */
+/* Subject catalogue.
+   Hand-written on purpose: assets/css/compiled/main.css is a frozen, committed
+   Tailwind JIT build, so any utility class not already in it has no effect. */
 
 .is-hidden {
   display: none !important;
 }
 
-/* -- Barre de filtres -- */
+/* -- Filter bar -- */
 
 .pf {
   margin: 2rem 0 1.5rem;
@@ -117,7 +117,7 @@
   color: rgb(var(--color-neutral-200));
 }
 
-/* -- Liste des sujets -- */
+/* -- Subject list -- */
 
 .pi-list {
   display: flex;

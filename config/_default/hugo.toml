@@ -15,8 +15,8 @@ buildFuture = false
 summaryLength = 30
 timeout = "120s"
 
-# Sans ça Hugo titre-case les termes de taxonomie : « Non classé » deviendrait
-# « Non Classé » et « P3 HES d'été » « P3 HES D'été ».
+# Without this Hugo title-cases taxonomy terms: "Non classé" would render as
+# "Non Classé" and "P3 HES d'été" as "P3 HES D'été".
 titleCaseStyle = "none"
 
 [pagination]

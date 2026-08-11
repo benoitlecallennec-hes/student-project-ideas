@@ -1,5 +1,5 @@
-{{- /* Puces construites depuis les pages de la section courante, pas depuis
-       .Site.Taxonomies qui mélangerait sujets et réalisations. */ -}}
+{{- /* Chips are built from the pages of the current section, not from
+       .Site.Taxonomies, which would mix sujets and realisations. */ -}}
 {{- $pages := .pages -}}
 {{- $cats := slice -}}
 {{- $stats := slice -}}
@@ -8,7 +8,7 @@
   {{- range .Params.statuts }}{{ $stats = $stats | append . }}{{ end -}}
 {{- end -}}
 
-{{- /* Du plus vague au plus prêt à démarrer, plutôt qu'alphabétique. */ -}}
+{{- /* Ordered from vaguest to most ready to start, rather than alphabetically. */ -}}
 {{- $ordreStatuts := slice "Idea" "Prospection" "Next Up" "In Progress" "OnHold" "Completed" "WontDo" -}}
 {{- $statsTries := slice -}}
 {{- range $ordreStatuts }}{{ if in $stats . }}{{ $statsTries = $statsTries | append . }}{{ end }}{{ end -}}
