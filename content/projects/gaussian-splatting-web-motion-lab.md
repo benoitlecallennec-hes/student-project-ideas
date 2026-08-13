@@ -35,4 +35,4 @@ Capture photo/vidéo du Motion-Lab → Reconstruction 3D via Gaussian Splatting 
 
 ## À rapprocher
 
-Le projet [Web Viewer pour insectes]({{< relref "/sujets/web-viewer-pour-insectes" >}}) emploie la même technique de reconstruction, mais appliquée à des scans d'insectes.
+Le projet [Web Viewer pour insectes]({{< relref "/projects/web-viewer-pour-insectes" >}}) emploie la même technique de reconstruction, mais appliquée à des scans d'insectes.

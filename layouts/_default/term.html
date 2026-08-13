@@ -1,0 +1,28 @@
+{{ define "main" }}
+{{ .Scratch.Set "scope" "term" }}
+
+<header>
+  <h1 class="mt-5 text-4xl font-extrabold text-neutral-900 dark:text-neutral">{{ .Title }}</h1>
+</header>
+
+<section class="mt-0 prose flex max-w-full flex-col dark:prose-invert">
+  <div class="min-w-0 min-h-0 max-w-prose">
+    {{ .Content }}
+  </div>
+</section>
+
+{{ $pages := .Pages.ByDate.Reverse }}
+{{ if gt (len $pages) 0 }}
+  {{/* Same rendering as the section list, so a term page is not a visual outlier. */}}
+  <section class="pi-list">
+    {{ range $pages }}
+    {{ partial "project-item.html" . }}
+    {{ end }}
+  </section>
+{{ else }}
+  <section class="mt-10 prose dark:prose-invert">
+    <p class="py-8 border-t"><em>{{ i18n "list.no_articles" | emojify }}</em></p>
+  </section>
+{{ end }}
+
+{{ end }}

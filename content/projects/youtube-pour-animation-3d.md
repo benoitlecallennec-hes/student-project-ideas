@@ -39,8 +39,8 @@ suggestions.
 
 ## À rapprocher
 
-Le sujet recoupe [MoCap Asset Manager]({{< relref "/sujets/mocap-asset-manager" >}})
+Le sujet recoupe [MoCap Asset Manager]({{< relref "/projects/mocap-asset-manager" >}})
 pour la génération des vignettes et des aperçus, et
-[BdD de Motion Capture]({{< relref "/sujets/bdd-de-motion-capture" >}}) pour
+[BdD de Motion Capture]({{< relref "/projects/bdd-de-motion-capture" >}}) pour
 l'indexation et la recherche. À arbitrer : sujet distinct, ou couche de présentation
 au-dessus de ces deux-là.

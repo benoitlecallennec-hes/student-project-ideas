@@ -1,14 +1,11 @@
 [[main]]
-  name = "Sujets disponibles"
-  pageRef = "sujets"
+  name = "Tous les projets"
+  pageRef = "projects"
   weight = 10
 
+# Server-rendered term page: statuts is the single source of truth for what is done,
+# so no separate section to keep in sync.
 [[main]]
   name = "Projets réalisés"
-  pageRef = "realisations"
+  pageRef = "/statuts/completed"
   weight = 20
-
-[[main]]
-  name = "Catégories"
-  pageRef = "categories"
-  weight = 30

@@ -13,4 +13,4 @@ Optimiser MotionMachine en portant en C++ les parties critiques du package Pytho
 
 ## À rapprocher
 
-[Motion Machine SaaS]({{< relref "/sujets/motion-machine-saas" >}}) traite de la plateforme et des services ; ce projet-ci porte sur les performances du cœur.
+[Motion Machine SaaS]({{< relref "/projects/motion-machine-saas" >}}) traite de la plateforme et des services ; ce projet-ci porte sur les performances du cœur.

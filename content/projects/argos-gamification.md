@@ -43,8 +43,8 @@ avant de construire.
 
 ## À rapprocher
 
-[CONCEPTION Gamifying C Programming Learning]({{< relref "/sujets/gamifying-c-programming-learning" >}})
-et [C Achievements in Unity]({{< relref "/sujets/c-achievements-in-unity" >}}) ont
+[CONCEPTION Gamifying C Programming Learning]({{< relref "/projects/gamifying-c-programming-learning" >}})
+et [C Achievements in Unity]({{< relref "/projects/c-achievements-in-unity" >}}) ont
 exploré la même idée sans ARGOS ; la plateforme réalisée dans
-[ARGOS V2]({{< relref "/realisations/argos-v2" >}}) fournit désormais la base
+[ARGOS V2]({{< relref "/projects/argos-v2" >}}) fournit désormais la base
 technique.

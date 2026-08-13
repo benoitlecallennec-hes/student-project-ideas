@@ -27,11 +27,12 @@ silencieusement** du build. En édition, utiliser `hugo server -F`.
 ```
 content/
   _index.md                 accueil
-  sujets/                   47 sujets disponibles  → /sujets/
-  realisations/              6 projets réalisés    → /realisations/
-  categories/               branch bundles pour corriger un slug de terme
+  projects/                 les 57 fiches, un seul répertoire  → /projects/
+  categories/               branch bundle pour corriger un slug de terme
+  statuts/completed/        branch bundle : titre de la page « Projets réalisés »
 layouts/
-  _default/list.html        liste des sections (remplace celle du thème)
+  _default/list.html        liste de section (remplace celle du thème)
+  _default/term.html        page de terme, même rendu que la liste de section
   _default/index.json       index de recherche Fuse.js
   partials/project-item.html    une entrée de liste
   partials/project-filters.html barre de filtres
@@ -46,7 +47,7 @@ tools/import_projets.py     script d'import one-shot (archive, ne pas relancer)
 
 ## Ajouter une fiche
 
-Créer `content/sujets/<slug>.md` (slug kebab-case ASCII) :
+Créer `content/projects/<slug>.md` (slug kebab-case ASCII) :
 
 ```markdown
 ---
@@ -79,15 +80,16 @@ Une phrase d'accroche.
 - **`summary` omis** ⇒ la liste affiche « Sujet à préciser » à la place du résumé.
   C'est voulu pour les esquisses ; le renseigner dès que la fiche a du contenu.
 - `statuts` (au pluriel, liste d'un élément) : `Idea`, `Next Up`, `Prospection`,
-  `In Progress`, `Completed`, `OnHold`, `WontDo`. **`Completed` classe la fiche dans
-  `realisations/`** — la ranger physiquement dans le bon dossier.
+  `In Progress`, `Completed`, `OnHold`, `WontDo`. **C'est la seule chose à changer quand
+  un projet est livré** : passer le statut à `Completed` suffit, la fiche apparaît alors
+  sur `/statuts/completed/` et son URL ne bouge pas. Rien à déplacer.
 - `categories` : `TB`, `Projets P1`, `Projets P2`, `Projets P3`, `P3 HES d'été`,
   `Cours GELO`, `Cours Infographie`, `Cours C`, `Algos + SdD`, `Ra&D`, `Python`,
   `General`, `Non classé`. Les puces de filtre se construisent automatiquement depuis
   les valeurs présentes — aucune liste à maintenir ailleurs.
 - `nature` (optionnel) : `Enseignement` ou `Ra&D`. **Ne jamais utiliser `type`** :
   c'est une clé réservée par Hugo qui change le layout utilisé.
-- Lien vers une autre fiche : `[Titre]({{< relref "/sujets/autre-slug" >}})`. Un lien
+- Lien vers une autre fiche : `[Titre]({{< relref "/projects/autre-slug" >}})`. Un lien
   cassé fait échouer le build, ce qui est le comportement voulu.
 - **Aucun nom de personne** sur le site : c'est une règle éditoriale du site, appliquée
   à l'import et vérifiée à la relecture. Le contact passe par la page d'accueil.

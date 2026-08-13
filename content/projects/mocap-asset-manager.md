@@ -14,4 +14,4 @@ Outil de gestion des assets de capture de mouvement du Motion-Lab : génération
 
 ## À rapprocher
 
-Le projet [BdD de Motion Capture]({{< relref "/sujets/bdd-de-motion-capture" >}}) couvre le modèle de données et l'indexation ; il liste la visualisation et la classification des animations parmi ses objectifs secondaires. À arbitrer : sujet distinct, ou extension de celui-ci.
+Le projet [BdD de Motion Capture]({{< relref "/projects/bdd-de-motion-capture" >}}) couvre le modèle de données et l'indexation ; il liste la visualisation et la classification des animations parmi ses objectifs secondaires. À arbitrer : sujet distinct, ou extension de celui-ci.

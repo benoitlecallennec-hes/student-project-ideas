@@ -11,8 +11,8 @@ Les sujets vont de l'idée en une ligne, encore à défricher, au cahier des cha
 quasi prêt à démarrer. Un sujet marqué « à préciser » est une invitation : venez en
 discuter, on le cadrera ensemble.
 
-- **[Sujets disponibles]({{< relref "/sujets" >}})** — le catalogue, filtrable par catégorie et par statut.
-- **[Projets réalisés]({{< relref "/realisations" >}})** — ce que des étudiants ont déjà livré.
+- **[Tous les projets]({{< relref "/projects" >}})** — le catalogue, filtrable par catégorie et par statut.
+- **[Projets réalisés]({{< relref "/statuts/completed" >}})** — ce que des étudiants ont déjà livré.
 
 ## Intéressé par un sujet ?
 
