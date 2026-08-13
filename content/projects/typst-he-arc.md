@@ -19,10 +19,9 @@ rendu de diagrammes externe.
 
 Les documents produits pendant un projet ou un travail de Bachelor (cahier des charges, rapport, poster) suivent des gabarits imposés : les porter en Typst supprimerait une bonne part de la friction que les étudiants rencontrent aujourd'hui avec LaTeX ou avec Word.
 
-Les diagrammes UML de ces documents sont souvent produits avec PlantUML, soit en local, soit sur un serveur externe. 
-L'installation locale de planteuml est possible, mais requiert en particulier Java et Graphviz.
+Les diagrammes UML de ces documents sont souvent produits avec PlantUML, soit en local, soit sur un serveur externe.
+L'installation locale de PlantUML est possible, mais requiert en particulier Java et Graphviz.
 L'utilisation d'un serveur public de rendu PlantUML est possible, mais pose des problèmes de confidentialité dans certains cas (projets Ra&D).
-
 
 ## Objectifs
 
@@ -49,16 +48,21 @@ Ce qui reste subjectif est évalué par des personnes **extérieures à l'encadr
 Les critères suivants ne sont que des suggestions.
 Il faut les revoir, et les ajuster le cas échéant.
 
+Les valeurs notées **X**, **Y**, **Z**, **T** et **S** sont à calibrer par l'équipe
+projet, puis à faire valider : **X** étudiants dans le panel dont **Y** doivent réussir,
+**Z** enseignants non encadrants, **T** minutes de temps imparti au protocole, **S**
+secondes de rendu maximal pour un diagramme.
+
 ### Mesures automatiques
 
-- Fidélité du gabarit rapport de TB : **≥ 98 %** de lignes identiques au PDF de référence, par extraction du texte puis `diff` — J8
-- Compilation d'un rapport de 40 pages : **< 2 s**, moyenne de 5 exécutions — J8
-- Installation depuis zéro : **≤ 3 commandes** et **< 5 min**, chronométré sur une machine virtuelle vierge — J6
-- **0** étapes manuelles entre `new` et le PDF généré — J6
-- **0** commandes `typst` ou `plantuml` brutes dans la documentation — J9
-- Types de diagrammes rendus : **5 sur 5** (classes, séquence, cas d'utilisation, activité, composants), chacun **< X s** — J4
-- Rendu avec l'accès Internet sortant coupé : **5 sur 5** réussis — J4
-- Reprise après redémarrage de l'hôte : **< 60 s** et **0 intervention** — J4
+- Fidélité du gabarit rapport de TB : **≥ 98 %** de lignes identiques au PDF de référence, par extraction du texte puis `diff`
+- Compilation d'un rapport de 40 pages : **< 2 s**, moyenne de 5 exécutions
+- Installation depuis zéro : **≤ 3 commandes** et **< 5 min**, chronométré sur une machine virtuelle vierge
+- **0** étape manuelle entre `new` et le PDF généré
+- **0** commande `typst` ou `plantuml` brute dans la documentation
+- Types de diagrammes rendus : **5 sur 5** (classes, séquence, cas d'utilisation, activité, composants), chacun **< S s**
+- Rendu avec l'accès Internet sortant coupé : **5 sur 5** réussis
+- Reprise après redémarrage de l'hôte : **< 60 s** et **0 intervention**
 
 ### Panel de X étudiants extérieurs au projet
 
@@ -67,17 +71,23 @@ Critère d'inclusion : **n'avoir jamais utilisé Typst** (ou presque).
 
 **Protocole.** Chacun reçoit une machine vierge et la seule documentation, et doit produire un cahier des charges de 3 pages contenant une figure, un tableau et un diagramme UML.
 Chronomètre lancé, **aucune aide** : l'observateur note sans intervenir.
-Échec au-delà de 30 minutes.
+Échec au-delà de **T** minutes.
 
-- Terminent le document sans aide : **≥ 5 sur 6**, en **< 20 min**
-- Temps médian jusqu'à la première compilation réussie : **< 10 min**
+- Terminent le document sans aide dans le temps imparti : **Y sur X**
+- Temps médian jusqu'à la première compilation réussie : **< T / 2**
 - Sorties de la documentation (recherche web, question posée) : **≤ 1** en moyenne
 - « Je saurais refaire seul », note de 1 à 5 : **moyenne ≥ 4**
 - « Comparé à Word ou LaTeX », note de 1 à 5 : **moyenne ≥ 4**
 
-### Enseignants
+### Service informatique de l'école
 
 - Revue de mise en production du serveur PlantUML : **0 remarque bloquante**
 - Documentation d'exploitation : **≤ 2 pages**, jugée suffisante pour reprendre le service sans ses auteurs
-- **0** flux sortants vers Internet mesurés sur 24 h
-- Conformité des gabarits : **0 écart majeur** et **≤ 2 écarts mineurs**
+- **0** flux sortant vers Internet mesuré sur 24 h
+
+### Z enseignants non encadrants
+
+- Conformité des gabarits, évaluée en aveugle sur une grille établie à partir du gabarit officiel de l'école : **0 écart majeur** et **≤ 2 écarts mineurs**
+
+La personne qui réceptionne les rapports de travail de Bachelor est l'évaluatrice la plus
+légitime : c'est elle qui refuse un document non conforme en pratique.
