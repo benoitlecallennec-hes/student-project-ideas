@@ -1,8 +1,8 @@
 ---
 title: "CHAOS OF LEGENDS"
 date: 2021-11-29
-description: "Référence : CHAOS LEAGUE : https://youtu.be/y_pMD53JRyo"
-summary: "Référence : CHAOS LEAGUE : https://youtu.be/y_pMD53JRyo"
+description: "Un remake de Chaos League : système de champions, draft, et parties jouées en live, avec des animations reprises de Mixamo."
+summary: "Un remake de Chaos League : système de champions, draft, et parties jouées en live, avec des animations reprises de Mixamo."
 categories:
   - "TB"
 statuts:

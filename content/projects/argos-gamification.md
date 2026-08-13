@@ -7,6 +7,8 @@ categories:
   - "P3 HES d'été"
 statuts:
   - "Idea"
+aliases:
+  - "/projects/gamifying-c-programming-learning/"
 ---
 
 Évaluer puis concevoir des mécaniques de jeu dans ARGOS, pour soutenir la progression
@@ -23,6 +25,23 @@ Reste la vraie question, qui est le cœur de ce sujet : est-ce que des badges, d
 points ou un classement améliorent réellement l'apprentissage, ou est-ce qu'ils
 déplacent l'attention de l'étudiant vers le score ? Le projet commence par y répondre
 avant de construire.
+
+## Références
+
+Deux plateformes à étudier, dont la combinaison est le point de départ de l'idée :
+
+- [Stack Overflow](https://stackoverflow.com/help/badges) — son système de **badges**,
+  attribués pour des actions précises et vérifiables plutôt que pour un volume brut,
+  avec trois niveaux (bronze, argent, or) et des badges à obtention unique ou répétable.
+  C'est le modèle de progression le plus documenté et le plus critiqué : les deux sont
+  utiles ici.
+- [SPOJ](https://www.spoj.com/) — Sphere Online Judge : un **juge en ligne** qui accepte
+  ou rejette une soumission de code, avec des problèmes classés par difficulté et un
+  classement des participants. C'est exactement la mécanique qu'ARGOS possède déjà sans
+  l'exploiter, puisqu'il sait si un exercice passe ou non.
+
+L'idée fondatrice tient en une phrase : **croiser le système de badges de Stack Overflow
+avec le juge en ligne de SPOJ**, appliqué aux exercices de C corrigés par ARGOS.
 
 ## Objectifs
 
@@ -43,8 +62,7 @@ avant de construire.
 
 ## À rapprocher
 
-[CONCEPTION Gamifying C Programming Learning]({{< relref "/projects/gamifying-c-programming-learning" >}})
-et [C Achievements in Unity]({{< relref "/projects/c-achievements-in-unity" >}}) ont
-exploré la même idée sans ARGOS ; la plateforme réalisée dans
-[ARGOS V2]({{< relref "/projects/argos-v2" >}}) fournit désormais la base
-technique.
+[C Achievements in Unity]({{< relref "/projects/c-achievements-in-unity" >}}) a exploré
+la même idée sans ARGOS, sous l'angle de la visualisation de la progression ; la
+plateforme réalisée dans [ARGOS V2]({{< relref "/projects/argos-v2" >}}) fournit
+désormais la base technique.

@@ -1,8 +1,8 @@
 ---
 title: "PAINT YOUR TOWN"
 date: 2021-11-29
-description: "Comme ceci : https://youtu.be/4jA1RM5_WMc?t=51"
-summary: "Comme ceci : https://youtu.be/4jA1RM5_WMc?t=51"
+description: "Une ville en 3D, blanche au départ, que des utilisateurs identifiés peignent et taguent ensemble — Neuchâtel et Lausanne, avec un versant réseau social."
+summary: "Une ville en 3D, blanche au départ, que des utilisateurs identifiés peignent et taguent ensemble — Neuchâtel et Lausanne, avec un versant réseau social."
 categories:
   - "Non classé"
 statuts:
