@@ -91,11 +91,3 @@ logiciel 3D et sans aide**. Chronomètre lancé, l'observateur note sans interve
 - Licences et droits d'utilisation visibles sur **100 %** des animations publiées
 - Documentation d'exploitation : **≤ 2 pages**, jugée suffisante pour reprendre le service sans ses auteurs
 
-## À rapprocher
-
-Ce sujet absorbe l'ancienne fiche « MoCap Asset Manager », qui ne couvrait que la
-génération des vignettes et des aperçus : elle en est devenue le premier objectif.
-
-Il recoupe encore [BdD de Motion Capture]({{< relref "/projects/bdd-de-motion-capture" >}})
-pour l'indexation et la recherche. À arbitrer : sujet distinct, ou couche de présentation
-au-dessus de cette base de données.
