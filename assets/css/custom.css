@@ -23,6 +23,20 @@
   display: none !important;
 }
 
+/* -- Tables -- */
+
+/* Paired with layouts/_default/_markup/render-table.html. */
+.table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap > table {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 /* -- Filter bar -- */
 
 .pf {
